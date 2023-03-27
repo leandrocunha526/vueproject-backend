@@ -17,6 +17,8 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { Response } from 'express';
+import AuthUser from 'src/common/decorators/auth-user.decorator';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 @Controller('task')
 export class TaskController {
@@ -48,8 +50,12 @@ export class TaskController {
 
     @UseGuards(JwtAuthGuard)
     @Get('list')
-    async getAllTasks(@Req() req, @Res() res: Response) {
-        const tasks = await this.taskService.getAllTasks(req.user.id);
+    async getAllTasks(
+        @Req() req,
+        @Res() res: Response,
+        @AuthUser() user: UserEntity,
+    ) {
+        const tasks = await this.taskService.getAllTasks(user);
         if (tasks) {
             return res.status(HttpStatus.CREATED).json({
                 tasks: tasks,
