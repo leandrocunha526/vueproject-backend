@@ -14,6 +14,8 @@ import { Response } from 'express';
 import { LocalAuthGuard } from 'src/auth/local.guard';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import AuthUser from 'src/common/decorators/auth-user.decorator';
+import { UserEntity } from './entities/user.entity';
 
 @Controller('user')
 export class UserController {
@@ -52,7 +54,7 @@ export class UserController {
 
     @UseGuards(JwtAuthGuard)
     @Get('profile')
-    async profile(@Request() req) {
-        return req.user;
+    async profile(@AuthUser() user: UserEntity) {
+        return user;
     }
 }
