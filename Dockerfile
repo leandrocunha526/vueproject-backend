@@ -1,5 +1,5 @@
 # Base image
-FROM node:16-bullseye As development
+FROM node:18-alpine As development
 
 WORKDIR /app
 
