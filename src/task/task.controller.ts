@@ -57,7 +57,7 @@ export class TaskController {
     ) {
         const tasks = await this.taskService.getAllTasks(user);
         if (tasks) {
-            return res.status(HttpStatus.CREATED).json({
+            return res.status(HttpStatus.OK).json({
                 tasks: tasks,
                 success: true,
             });

@@ -20,6 +20,7 @@ export class TaskService {
         task.title = createTaskDto.title;
         task.description = createTaskDto.description;
         task.status = createTaskDto.status;
+        task.duedate = new Date(createTaskDto.duedate);
         task = await this.taskRepository.save(task);
 
         const user = await this.userRepository.findOne({

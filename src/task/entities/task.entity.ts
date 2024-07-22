@@ -28,6 +28,9 @@ export class TaskEntity {
     })
     createdAt: Date;
 
+    @Column({ type: 'timestamptz' })
+    duedate: Date;
+
     @UpdateDateColumn({
         type: 'timestamptz',
         default: () => 'CURRENT_TIMESTAMP',

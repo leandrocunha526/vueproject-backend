@@ -2,6 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class UpdateTaskDto {
+    @ApiProperty()
+    @IsString()
+    id: string;
+
     @IsNotEmpty()
     @IsString()
     @ApiProperty()
@@ -16,4 +20,9 @@ export class UpdateTaskDto {
     @IsString()
     @ApiProperty()
     status: string;
+
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty()
+    duedate: string;
 }
