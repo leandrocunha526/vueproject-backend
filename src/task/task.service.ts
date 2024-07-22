@@ -35,6 +35,9 @@ export class TaskService {
     async getAllTasks(userId: any) {
         const tasks = await this.taskRepository.find({
             where: { user: userId },
+            order: {
+                duedate: 'ASC',
+            },
         });
         return tasks;
     }
