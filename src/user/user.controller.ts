@@ -25,7 +25,10 @@ export class UserController {
     ) {}
 
     @Post('register')
-    async register(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
+    async register(
+        @Body() createUserDto: CreateUserDto,
+        @Res({ passthrough: true }) res: Response,
+    ) {
         const registerResult = await this.userService.create(createUserDto);
         if (registerResult) {
             return res.status(HttpStatus.CREATED).json({
