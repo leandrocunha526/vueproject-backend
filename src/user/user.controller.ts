@@ -7,6 +7,9 @@ import {
     UseGuards,
     Request,
     Get,
+    Delete,
+    Param,
+    Put,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
@@ -16,6 +19,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import AuthUser from 'src/common/decorators/auth-user.decorator';
 import { UserEntity } from './entities/user.entity';
+import { UpdateUserDTO } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -59,5 +63,67 @@ export class UserController {
     @Get('profile')
     async profile(@AuthUser() user: UserEntity) {
         return user;
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Delete('/delete/:id')
+    async delete(@Param('id') id: number, @Res() res: Response) {
+        const deleteResult = await this.userService.deleteUser(id);
+        if (deleteResult) {
+            return res.status(HttpStatus.OK).json({
+                message: 'User has been deleted successfully',
+                success: true,
+            });
+        }
+        return res.status(HttpStatus.NOT_FOUND).json({
+            message: 'User not found',
+            success: false,
+        });
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/detail/:id')
+    async findUserById(
+        @Param('id') id: number,
+        @Res({ passthrough: true }) res: Response,
+    ) {
+        const user = await this.userService.findUserById(id);
+        if (user) {
+            return {
+                user,
+            };
+        } else {
+            return res.status(HttpStatus.NOT_FOUND).json({
+                message: 'User not found',
+                success: false,
+            });
+        }
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Put('/update/:id')
+    async update(
+        @Param('id') id: number,
+        @Body() updateUserDto: UpdateUserDTO,
+        @Res({ passthrough: true }) res: Response,
+    ) {
+        try {
+            const user = await this.userService.update(id, updateUserDto);
+            if (user) {
+                return {
+                    user,
+                };
+            }
+            return res.status(HttpStatus.NOT_FOUND).json({
+                message: 'User not found',
+                success: false,
+            });
+        } catch (error) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+                message: 'An error occurred',
+                success: false,
+                error: error.message,
+            });
+        }
     }
 }

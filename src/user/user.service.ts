@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import * as argon2 from 'argon2';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDTO } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -55,10 +56,59 @@ export class UserService {
     }
 
     async findById(id: number) {
+        const user = await this.userRepository.findOne({
+            where: { id: id },
+        });
+        if (user) {
+            return {
+                id: user.id,
+                username: user.username,
+            };
+        } else {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+    }
+
+    async findUserById(id: number) {
+        const user = await this.userRepository.findOne({
+            where: { id: id },
+        });
+        if (user) {
+            return user;
+        } else {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+    }
+
+    async deleteUser(id: number) {
         const user = await this.userRepository.findOne({ where: { id: id } });
-        return {
-            id: user.id,
-            username: user.username,
-        };
+        if (user) {
+            await this.userRepository.remove(user);
+            return {
+                message: 'User deleted',
+            };
+        } else {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+    }
+
+    async update(id: number, updateUserDto: UpdateUserDTO) {
+        try {
+            const user = await this.userRepository.findOne({ where: { id } });
+            if (!user) {
+                throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+            }
+
+            user.username = updateUserDto.username;
+            await this.userRepository.save(user);
+
+            return { message: 'User updated' };
+        } catch (error) {
+            console.error('Error updating user:', error);
+            throw new HttpException(
+                'Error updating user',
+                HttpStatus.BAD_REQUEST,
+            );
+        }
     }
 }

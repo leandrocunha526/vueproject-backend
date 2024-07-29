@@ -5,10 +5,12 @@ import {
     Entity,
     OneToMany,
     PrimaryGeneratedColumn,
+    Unique,
     UpdateDateColumn,
 } from 'typeorm';
 import * as argon2 from 'argon2';
 import { TaskEntity } from 'src/task/entities/task.entity';
+import { Length } from 'class-validator';
 
 @Entity('user')
 export class UserEntity {
@@ -16,9 +18,12 @@ export class UserEntity {
     id: number;
 
     @Column({ nullable: false })
+    @Unique(['username'])
+    @Length(6)
     username: string;
 
     @Column({ nullable: false })
+    @Length(6)
     password: string;
 
     @OneToMany(() => TaskEntity, (task) => task.user)
