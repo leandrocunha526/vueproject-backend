@@ -122,7 +122,7 @@ export class UserController {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
                 message: 'An error occurred',
                 success: false,
-                error: error.message,
+                error: error,
             });
         }
     }
