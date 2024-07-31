@@ -35,11 +35,10 @@ export class UserController {
     ) {
         const registerResult = await this.userService.create(createUserDto);
         if (registerResult) {
-            return res.status(HttpStatus.CREATED).json({
+            return {
                 message: 'User has been created successfully',
-                user: registerResult,
                 success: true,
-            });
+            };
         }
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
             message: 'Error 500: Internal Server Error',
