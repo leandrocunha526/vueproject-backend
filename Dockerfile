@@ -1,10 +1,10 @@
 # Base image
-FROM node:18-alpine As development
+FROM node:20-alpine As development
 
 WORKDIR /app
 
 COPY . .
 
-RUN npm install
+RUN yarn
 
 CMD [ "./.docker/start.dev.sh" ]
