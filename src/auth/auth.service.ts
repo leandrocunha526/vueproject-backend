@@ -25,6 +25,13 @@ export class AuthService {
         const token = this.jwtService.sign(payload, {
             expiresIn: '1h',
         });
+        /*
+           Here, I was given the option to not return the token,
+           but it is optional if I want to change the authentication
+           to a token instead of a cookie stored in session storage.
+           The front-end is integrated in this way.
+           See user/user.controller.ts for more details.
+        */
         return {
             token: token,
         };
