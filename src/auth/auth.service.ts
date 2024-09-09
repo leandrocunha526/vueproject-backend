@@ -36,7 +36,7 @@ export class AuthService {
         setting this token as a cookie in the client browser and storing in session storage.
         */
         return {
-            token: token,
+            token,
         };
     }
 }
