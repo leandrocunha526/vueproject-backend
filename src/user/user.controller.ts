@@ -55,18 +55,21 @@ export class UserController {
             res.cookie('auth-cookie', login_token, {
                 httpOnly: true,
                 secure: true,
-                maxAge: 1000 * 60 * 60, // 1 hora
+                sameSite: 'strict',
+                maxAge: 60 * 60 * 1000, // 1 hour
             });
-            return res.status(HttpStatus.OK).json({
+            return {
                 message: 'User logged in successfully',
                 success: true,
-            });
-        } else {
-            return res.status(HttpStatus.UNAUTHORIZED).json({
-                message: 'Invalid credentials',
-                success: false,
-                code: HttpStatus.UNAUTHORIZED,
-            });
+                code: HttpStatus.OK,
+            };
+            // Note: The login method receives the token from the AuthService.
+            // It sets the token as an HttpOnly cookie (auth-cookie) in the response using res.cookie.
+            // So, while the AuthService generates the token, the UserController is responsible for
+            // setting this token as a cookie in the client browser and storing in session storage.
+            // The token is not returned directly in the response body.
+            // The frontend should handle the cookie for authentication.
+            // And it is not yet necessary to insert a return for 401 and the local guard already does that.
         }
     }
 

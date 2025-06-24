@@ -16,7 +16,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
             username: this.config.get<string>('DATABASE_USERNAME'),
             password: this.config.get<string>('DATABASE_PASSWORD'),
             database: this.config.get<string>('DATABASE_NAME'),
-            autoLoadEntities: true, //For Windows is need. Debian or others distributions with Kernel Linux is not necessary.
+            autoLoadEntities: true,
+            //For Windows is need. Debian or others distributions with Kernel Linux is not necessary.
             entities: ['dist/**/*.entity{.ts,.js}'],
             migrations: ['dist/migrations/*{.ts,.js}'],
             logger: 'file',
