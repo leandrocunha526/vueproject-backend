@@ -18,6 +18,7 @@ async function bootstrap() {
     const configService: ConfigService = app.get(ConfigService);
     //Set port with environment variable
     const port: number = configService.get<number>('PORT');
+    app.setGlobalPrefix('api'); // Set global prefix for all routes
 
     const config = new DocumentBuilder()
         .setTitle('NestJS API Tasks')
@@ -29,7 +30,6 @@ async function bootstrap() {
 
     app.enableCors({ origin: true, credentials: true });
     app.use(cookieParser());
-    app.setGlobalPrefix('api');
     await app.listen(port, () => {
         console.log(
             'Running server at',
