@@ -23,7 +23,10 @@ export class AuthService {
     async login(user: any) {
         const payload = { id: user.id, username: user.username };
         const token = this.jwtService.sign(payload, {
-            expiresIn: '1h',
+            expiresIn: '1h', // Short-lived access token
+        });
+        const refreshToken = this.jwtService.sign(payload, {
+            expiresIn: '7d', // Long-lived refresh token
         });
         /*
         Note: Returning the token here is optional. If the frontend is configured to
@@ -37,6 +40,7 @@ export class AuthService {
         */
         return {
             token,
+            refreshToken
         };
     }
 }

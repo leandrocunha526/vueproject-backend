@@ -55,7 +55,7 @@ export class UserController {
             res.cookie('auth-cookie', login_token, {
                 httpOnly: true,
                 secure: true,
-                maxAge: 1000 * 60 * 60, // 1 hora
+                maxAge: 1000 * 60 * 60 * 24 * 7, // 7 dias
             });
             return res.status(HttpStatus.OK).json({
                 message: 'User logged in successfully',
