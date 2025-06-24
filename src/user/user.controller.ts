@@ -26,7 +26,7 @@ export class UserController {
     constructor(
         private readonly userService: UserService,
         private readonly authService: AuthService,
-    ) {}
+    ) { }
 
     @Post('register')
     async register(
@@ -51,11 +51,23 @@ export class UserController {
     @Post('login')
     async login(@Request() req, @Res({ passthrough: true }) res: Response) {
         const login_token = await this.authService.login(req.user);
-        res.cookie('auth-cookie', login_token, { httpOnly: true });
-        return {
-            message: 'Login successful',
-            success: true,
-        };
+        if (login_token) {
+            res.cookie('auth-cookie', login_token, {
+                httpOnly: true,
+                secure: true,
+                maxAge: 1000 * 60 * 60, // 1 hora
+            });
+            return res.status(HttpStatus.OK).json({
+                message: 'User logged in successfully',
+                success: true,
+            });
+        } else {
+            return res.status(HttpStatus.UNAUTHORIZED).json({
+                message: 'Invalid credentials',
+                success: false,
+                code: HttpStatus.UNAUTHORIZED,
+            });
+        }
     }
 
     @UseGuards(JwtAuthGuard)

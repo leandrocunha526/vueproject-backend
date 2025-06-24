@@ -11,7 +11,7 @@ export class UserService {
     constructor(
         @InjectRepository(UserEntity)
         private readonly userRepository: Repository<UserEntity>,
-    ) {}
+    ) { }
 
     async validate(username: string, password: string) {
         const user = await this.userRepository.findOne({
@@ -23,7 +23,7 @@ export class UserService {
                 return user;
             }
         } else {
-            throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         }
     }
 
